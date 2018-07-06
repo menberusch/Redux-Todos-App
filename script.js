@@ -18,20 +18,23 @@ function rootReducer(state=initialState, action) {
         todos: [...newState.todos, {todo: action.todo, id: newState.id}]
       };
     case 'REMOVE_TODO':
-      let todos = state.todos.filter(todo => todo.id != action.id);
+      let todos = state.todos.filter(todo => todo.id !== action.id);
       return {...state, todos};
     default:
-      return state;
+      return state; 
   }
 }
 
-const store = Redux.createStore(rootReducer);
+const store = Redux.createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 $(document).ready(function() {
   $('ul').click('button', function(e) {
     store.dispatch({
       type: 'REMOVE_TODO',
-      id: $(e.target).attr('id')
+      id: parseInt($(e.target).attr('id'))
     });
     $(e.target).parent().remove();
   });
